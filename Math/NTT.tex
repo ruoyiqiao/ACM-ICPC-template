@@ -1,0 +1,79 @@
+\subsection{NTT}
+    \begin{lstlisting}[language=c++]
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int MOD = 998244353, G = 3, IG = 332748118;
+const int MAXN = 1 << 19; // Adjust this as needed
+
+typedef long long ll;
+
+int n1, n2, n, k, rev[MAXN];
+
+ll qk(ll x, ll y, int mod) {
+    ll res = 1;
+    while (y > 0) {
+        if (y % 2 == 1) {
+            res = (res * x) % mod;
+        }
+        x = (x * x) % mod;
+        y /= 2;
+    }
+    return res;
+}
+
+void ntt(vector<ll>& a, int p) {
+    for (int i = 0; i < n; i++) if (i < rev[i]) swap(a[i], a[rev[i]]);
+    for (int h = 1; h < n; h <<= 1) {
+        ll wn = qk(p == 1 ? G : IG, (MOD - 1) / (h << 1), MOD);
+        for (int i = 0; i < n; i += (h << 1)) {
+            ll w = 1;
+            for (int j = 0; j < h; j++, (w *= wn) %= MOD) {
+                ll x = a[i + j], y = w * a[i + j + h] % MOD;
+                a[i + j] = (x + y) % MOD, a[i + j + h] = (x - y + MOD) % MOD;
+            }
+        }
+    }
+    if (p == -1) {
+        ll ninv = qk(n, MOD - 2, MOD);
+        for (int i = 0; i < n; i++) (a[i] *= ninv) %= MOD;
+    }
+}
+
+void mul(vector<ll>& a, vector<ll>& b) {
+    n = 1, k = 0;
+    while (n <= n1 + n2) n <<= 1, k++;
+    a.resize(n); b.resize(n);
+    for (int i = 0; i < n; i++) rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (k - 1));
+    ntt(a, 1); ntt(b, 1);
+    for (int i = 0; i < n; i++) (a[i] *= b[i]) %= MOD;
+    ntt(a, -1);
+}
+
+int main() {
+    // Example usage: Multiply two polynomials (x + 1) and (x^2 + 2x + 3)
+
+    // Define the coefficients of the first polynomial (x + 1)
+    vector<ll> poly1 = {1, 1};
+
+    // Define the coefficients of the second polynomial (x^2 + 2x + 3)
+    vector<ll> poly2 = {3, 2, 1};
+
+    n1 = poly1.size();
+    n2 = poly2.size();
+
+    mul(poly1, poly2);
+
+    // The result vector now contains the coefficients of the product polynomial
+
+    cout << "Product Polynomial Coefficients: ";
+    for (int i = 0; i < n1 + n2 - 1; i++) {
+        cout << poly1[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+    \end{lstlisting}

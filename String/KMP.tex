@@ -1,0 +1,77 @@
+\subsection{KMP\& EXKMP}
+\begin{lstlisting}[language=c++]
+struct KMP {
+    std::vector<int> fail; 
+    std::string pattern; 
+    KMP() {} 
+    
+    KMP(const std::string& p) {
+        init(p);
+    }
+    
+    void init(const std::string& p) {
+        pattern = p; 
+        fail.resize(pattern.size() + 1); 
+        fail[0] = -1; // 失配数组第一个元素为-1
+        int j = -1; // j表示失配数组的值
+        for (int i = 0; i < pattern.size(); i++) { // 遍历模式串
+            while (j >= 0 && pattern[i] != pattern[j]) { // 如果失配，则回溯
+                j = fail[j]; // 回溯到失配位置的失配数组值
+            }
+            j++; // 失配数组值加1
+            fail[i + 1] = j; // 更新失配数组
+        }
+    }
+    // 匹配函数，返回所有匹配位置
+    std::vector<int> match(const std::string& s) {
+        std::vector<int> res; 
+        int j = 0; 
+        for (int i = 0; i < s.size(); i++) { // 遍历文本串
+            while (j >= 0 && s[i] != pattern[j]) { // 如果失配，则回溯
+                j = fail[j]; // 回溯到失配位置的失配数组值
+            }
+            // dbg(i, j, s[i], pattern[j], pattern.size());
+            j++; // 失配数组值加1
+            if (j == pattern.size()) { // 如果匹配成功
+            	
+                res.push_back(i - j + 1); // 存储匹配位置
+                j = fail[j]; // 回溯到失配位置的失配数组值
+            }
+        }
+        return res; // 返回所有匹配位置
+    }
+};
+struct EXKMP {
+    string pattern;
+    vector<int> z;
+    EXKMP() {} 
+    
+    EXKMP(const std::string& p) {
+        init(p);
+    }
+    
+    void init(const std::string& p) {
+        pattern = p;
+        int n = p.size();
+        z.resize(n);
+        z.assign(n, 0);
+        z[0] = p.size();
+        for (int i = 1, l, r = -1; i < n; i++) {
+            if (i <= r) z[i] = min(z[i - l], r - i + 1);
+            while(i + z[i] < n && p[z[i]] == p[i + z[i]]) z[i]++;
+            if (r < i + z[i] - 1) l = i, r = i + z[i] - 1;
+        }
+    }
+    // 匹配函数，返回所有位置的最长前缀
+    std::vector<int> match(const std::string& s) {
+        vector<int> pre(s.size(), 0);
+        int m = s.size(), n = pattern.size();
+        for (int i = 0, l, r = -1; i < m; i++) {
+            if (i <= r) pre[i] = min(z[i - l], r - i + 1);
+            while(pre[i] < n && i + pre[i] < m && pattern[pre[i]] == s[i + pre[i]]) pre[i]++;
+            if (i + pre[i] - 1 > r) l = i, r = i + pre[i] - 1;
+        }
+        return pre;
+    }
+};
+\end{lstlisting}

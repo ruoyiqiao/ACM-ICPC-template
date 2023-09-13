@@ -1,0 +1,15 @@
+\subsection{序列自动机}
+\begin{lstlisting}[language=c++]
+class SequenceAM :public vector<vector<int>>{
+public:
+    SequenceAM() = default;
+    SequenceAM(const string& s, int sigma = 26)
+     :vector<vector<int>>(s.size() + 1, vector<int>(sigma, 0)) {
+        auto &nxt=*this;
+        for(int i=s.size();i>=1;i--) {
+            nxt[i][s[i-1]-'a']=i;
+            nxt[i-1]=nxt[i];
+        }
+    }
+};
+\end{lstlisting}

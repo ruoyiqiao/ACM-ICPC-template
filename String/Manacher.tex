@@ -1,0 +1,35 @@
+\subsection{Manacher}
+\begin{lstlisting}
+struct Manacher{
+    string s, t; // s 为原串 t 为补充后的串
+    int n;       // t 的长度
+    vector<int> d; // 回文半径
+    ma(string s) : s(s), n(s.size() * 2 + 3) {
+        init(t);
+        build(d);
+    }
+    void init(string &t) {
+        t = "$#";
+        for (int i = 0; i < s.size(); i++) {
+            t += s[i];
+            t += "#";
+        }
+        t += '@';
+    }
+    void build(vector<int> & d) {
+        auto equ = [&](char l, char r) {
+            return l == r;
+        };
+        d = vector<int>(n, 0);
+        d[1] = 1;
+        for (int i = 2, l = 1, r = 1; i < n; i++) {
+            if (i <= r) d[i] = min(d[r + l - i], r - i + 1);
+            while (equ(t[i - d[i]], t[i + d[i]])) {
+                d[i]++;
+            }
+            if (i + d[i] - 1 > r) r = i + d[i] - 1, l = i - d[i] + 1;
+        }
+        return;
+    }
+};
+\end{lstlisting}
