@@ -1,4 +1,6 @@
-ACM-ICPC Template
-=================
+# ACM-ICPC-template
+This repository contains a personal ACM-ICPC programming template. It's a collection of code snippets, algorithms, and data structures that I've found useful in competitive programming. Please note that some code may be referenced from other sources, and this template is organized according to my preferences.
 
-ACM-ICPC_Template @ECNU
+## License
+This ACM-ICPC template is provided under the MIT License. You are free to use and modify it for your competitive programming needs.
+>>>>>>> ba07e67bb893e632b9a6dd5645027d7f857a0ba3
