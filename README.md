@@ -3,3 +3,4 @@ This repository contains a personal ACM-ICPC programming template. It's a collec
 
 ## License
 This ACM-ICPC template is provided under the MIT License. You are free to use and modify it for your competitive programming needs.
+>>>>>>> ba07e67bb893e632b9a6dd5645027d7f857a0ba3

@@ -1,0 +1,35 @@
+\subsection{倍增LCA-最近公共祖先}
+    \begin{lstlisting}[language=c++]
+void bfs()
+{
+    dep[1]=1;
+    que[tail++]=1;
+    while(head<tail)
+    {
+        int p=que[head++];
+        for(int x=last[p];x!=0;x=pre[x])
+        {
+            if(f[p][0]!=son[x])
+            {
+                dep[son[x]]=dep[p]+1;
+                f[son[x]][0]=p;
+                que[tail++]=son[x];
+                for(int j=1;j<=20;j++)
+                    f[son[x]][j]=f[f[son[x]][j-1]][j-1];
+            }    
+        }    
+    }
+}
+int lca(int a,int b)
+{
+    if(dep[a]>dep[b]) swap(a,b);
+    for(int i=20;i>=0;i--)
+    {
+        if(dep[f[b][i]]>=dep[a]) b=f[b][i];
+        if(a==b) return a;    
+    }    
+    for(int i=20;i>=0;i--)
+        if(f[a][i]!=f[b][i]) a=f[a][i],b=f[b][i];
+    return f[a][0];
+}
+    \end{lstlisting}

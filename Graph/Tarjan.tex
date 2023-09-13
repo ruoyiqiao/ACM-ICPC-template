@@ -1,0 +1,33 @@
+\subsection{Tarjan}
+\begin{lstlisting}[language=c++]
+vector<int> dfn(n, -1), low(n, -1), be(n, -1);
+int tot = 0, cnt = 0;
+vector<int> st;
+function<void(int)> tarjan = [&](int cur) {
+    dfn[cur] = low[cur] = tot++;
+    st.push_back(cur);
+    for (auto &nex : g[cur]) {
+        if (dfn[nex] == -1) {
+            tarjan(nex);
+            low[cur] = min(low[cur], low[nex]);
+        } else if (be[nex] == -1) {
+            low[cur] = min(low[cur], dfn[nex]);
+        }
+    }
+    if (dfn[cur] == low[cur]) {
+        int v;
+        do {
+            v = st.back();
+            st.pop_back();
+            be[v] = cnt;
+        } while (v != cur);
+        cnt++;
+    }
+};
+
+for (int i = 0; i < n; i++) {
+    if (dfn[i] == -1) {
+        tarjan(i);
+    }
+}   
+\end{lstlisting}

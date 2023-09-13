@@ -1,0 +1,114 @@
+\subsection{后缀自动机}
+\begin{lstlisting}[language=c++]
+class SAM {
+public:
+    class state {
+    public:
+        state() = default;
+        state(int len, int link) :len(len), link(link) { };
+        state(int len, int link, map<char, int>& next) :len(len), link(link), next(next) { };
+        int len, link;
+        std::map<char, int> next;
+    };
+    vector<state> st;
+    SAM() {
+        st.push_back(state(0, -1));
+    }
+    SAM(const string& s) :SAM() {
+        for (auto ch : s) {
+            sam_extend(ch);
+        }
+    }
+    void sam_extend(char ch) {
+        int p = st.size() - 1, cur = st.size();
+        st.push_back(state(st.back().len + 1, -1));
+        while (p != -1 && st[p].next.count(ch) == 0) {
+            st[p].next[ch] = cur;
+            p = st[p].link;
+        }
+        if (p == -1) {
+            st[cur].link = 0;
+        } else {
+            int q = st[p].next[ch];
+            if (st[q].len == st[p].len + 1) {
+                st[cur].link = q;
+            } else {
+                st.push_back(state(st[p].len + 1, st[q].link, st[q].next));
+                int clone = st.size() - 1;
+                while (p != -1 && st[p].next[ch] == q) {
+                    st[p].next[ch] = clone;
+                    p = st[p].link;
+                }
+                st[q].link = st[cur].link = clone;
+            }
+        }
+    }
+};
+\end{lstlisting}
+\begin{lstlisting}[language = c++]
+struct SAM {
+    int vcnt, last;
+    std::vector<int> len, link;
+    std::vector<std::vector<int>> tr;
+
+    void init(int size) {
+        vcnt = last = 0;
+        len.resize(size);
+        link.resize(size);
+        tr.resize(size, std::vector<int>(26, 0));
+        link[0] = -1;
+    }
+
+    void clear() {
+        vcnt = last = 0;
+        len.clear();
+        link.clear();
+        tr.clear();
+    }
+
+    void add(int c) {
+        int cur = ++vcnt;
+        len[cur] = len[last] + 1;
+        int p = last;
+        while (p != -1 && !tr[p][c])
+            tr[p][c] = cur, p = link[p];
+        if (p == -1)
+            link[cur] = 0;
+        else {
+            int q = tr[p][c];
+            if (len[q] == len[p] + 1)
+                link[cur] = q;
+            else {
+                int clone = ++vcnt;
+                len[clone] = len[p] + 1;
+                link[clone] = link[q];
+                tr[clone] = tr[q];
+                while (p != -1 && tr[p][c] == q)
+                    tr[p][c] = clone, p = link[p];
+                link[q] = clone;
+                link[cur] = clone;
+            }
+        }
+        last = cur;
+    }
+};
+
+int main() {
+    SAM S;
+    int size = 2 * 100;  // 根据需要的大小设置
+    S.init(size);
+
+    // 使用 SAM 对字符串进行处理
+    std::string input = "abcabca";
+    for (char c : input) {
+        int index = c - 'a';
+        S.add(index);
+    }
+
+    // 输出 SAM 中的一些信息
+    std::cout << "Number of states: " << S.vcnt << std::endl;
+    std::cout << "Last state: " << S.last << std::endl;
+
+    return 0;
+}
+\end{lstlisting}

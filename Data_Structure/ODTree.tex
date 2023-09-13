@@ -1,0 +1,33 @@
+\subsection{珂朵莉树}
+\begin{lstlisting}[language=c++]
+struct node {
+    int l, r;
+    mutable int v;
+    node(int a = 0, int b = 0, int c = 0) :l(a), r(b), v(c) { };
+    friend bool operator<(const node& a, const node& b) {
+        return a.l < b.l;
+    }
+};
+
+class ODT :public set<node> {
+public:
+    ODT() :st(*this) { };
+    ODT(int l, int r, int v) :set<node>({ node(l,r,v) }), st(*this) { };
+    set<node>& st;
+
+    set<node>::iterator split(int pos) {
+        auto it = --st.upper_bound(node{ pos,0,0 });
+        if (it->l == pos) return it;
+        int l = it->l, r = it->r, v = it->v;
+        st.erase(it);
+        st.insert(node(l, pos - 1, v));
+        return st.insert(node(pos, r, v)).first;
+    }
+
+    void assign(int l, int r, int v) {
+        auto itr = split(r + 1), itl = split(l);
+        st.erase(itl, itr);
+        st.insert(node(l, r, v));
+    }
+};   
+\end{lstlisting}

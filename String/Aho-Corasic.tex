@@ -1,0 +1,47 @@
+\subsection{AC自动机}
+\begin{lstlisting}[language=c++]
+struct AC {
+  int n, tot, alp;
+  std::vector<int> fail;
+  std::vector<std::vector<int>> tr;
+  AC() {}
+  AC(int n, int m = 26) {
+    alp = m;
+    fail.resize(n);
+    tr.resize(n);
+    fail.assign(n, 0);
+    for (int i = 0; i < n; i++) {
+      tr[i].assign(m, 0);
+    }
+    init();
+  }
+  void init() {
+     tot = -1, new_node();
+  }
+  int new_node() { return ++tot, fail[tot] = 0, tr[tot].assign(tr[tot].size(), 0), tot; }
+  void insert(const std::string& s) {
+    for (int i = 0, u = 0; i < s.size(); i++) {
+      int c = s[i];
+      if(!tr[u][c]) tr[u][c] = new_node();
+      u = tr[u][c];
+    }
+  }
+  void build() {
+    std::queue<int> q;
+    int ql = 1, qr = 0;
+    for (int i = 0; i < alp; i++) {
+      if (tr[0][i]) {
+        q.push(tr[0][i]);
+      }
+    }
+    while(!q.empty()) {
+      int u = q.front();
+      q.pop(); 
+      for (int c = 0; c < alp; c++) {
+        if (tr[u][c]) fail[tr[u][c]] = tr[fail[u]][c], q.push(tr[u][c]);
+        else tr[u][c] = tr[fail[u]][c];
+      }
+    }
+  }
+};
+\end{lstlisting}

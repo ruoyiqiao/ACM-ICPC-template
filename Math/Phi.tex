@@ -1,0 +1,27 @@
+\subsection{欧拉函数}
+单独求欧拉函数phi(x)
+    \begin{lstlisting}[language=c++]
+int phi(int n) {
+	int m = 1;
+	for (int i = 2; n > 1; ++i) {
+		if (n % i == 0) {
+			m *= i - 1;
+			n /= i;
+			while (n % i == 0) {
+				m *= i;
+				n /= i;
+			}
+		}
+	}
+	return m;
+}
+    \end{lstlisting}
+预处理phi(x)
+    \begin{lstlisting}[language=c++]
+for (i = 1; i <= maxn; i++) phi[i] = i;
+for (i = 2; i <= maxn; i += 2) phi[i] /= 2;
+for (i = 3; i <= maxn; i += 2) if(phi[i] == i) {
+    for (j = i; j <= maxn; j += i)
+        phi[j] = phi[j] / i * (i - 1);
+}
+    \end{lstlisting}

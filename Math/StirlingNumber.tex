@@ -1,0 +1,10 @@
+\subsection{斯特林数}
+\begin{lstlisting}[language=c++]
+std::vector S(n + 2, std::vector<Z>(n + 2));
+for (int i = 0; i <= n + 1; i++) {
+    S[i][0] = !i;
+    for (int j = 1; j <= i; j++) {
+        S[i][j] = S[i - 1][j - 1] + S[i - 1][j] * j;
+    }
+}
+\end{lstlisting}
