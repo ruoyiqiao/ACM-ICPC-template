@@ -1,0 +1,45 @@
+\subsection{基环树}
+  \begin{lstlisting}[language=c++]
+vector<vector<int>> E(n);
+vector<int> deg(n);
+for (int j = 0; j < n; j++) {
+    deg[j] = E[j].size();
+}
+queue<int> Q;
+for (int j = 0; j < n; j++) {
+    if (deg[j] == 1) {
+        Q.push(j);
+    }
+}
+vector<bool> used(n, false);
+while (!Q.empty()) {
+    int v = Q.front();
+    Q.pop();
+    used[v] = true;
+    for (int w : E[v]) {
+        deg[w]--;
+        if (deg[w] == 1) {
+            Q.push(w);
+        }
+    }
+}
+vector<int> p(n, -1);
+vector<int> d(n, -1);
+for (int j = 0; j < n; j++) {
+    if (!used[j]) {
+        d[j] = 0;
+        Q.push(j);
+    }
+}
+while (!Q.empty()) {
+    int v = Q.front();
+    Q.pop();
+    for (int w : E[v]) {
+        if (d[w] == -1) {
+            d[w] = d[v] + 1;
+            p[w] = v;
+            Q.push(w);
+        }
+    }
+}
+  \end{lstlisting}
