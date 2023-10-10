@@ -1,18 +1,12 @@
-latex: template.pdf
-	mv template.pdf pdf/template.pdf
-	rm -f *.dvi
-	
-all: template.pdf
-	mv template.pdf pdf/template.pdf
-	rm -f *.dvi
-	
-template.pdf: template.dvi
-	dvipdfmx $<
+PDF_DIR := pdf
 
-template.dvi: template.tex
-	latex $<
-	latex $<
+.PHONY: all clean
+
+all: $(PDF_DIR)/template.pdf
+
+$(PDF_DIR)/template.pdf: template.tex
+	xelatex -shell-escape -output-directory=$(PDF_DIR) $<
+	xelatex -shell-escape -output-directory=$(PDF_DIR) $<
 
 clean:
-	rm -f *.pdf
-	rm -f *.dvi
+	rm -f $(PDF_DIR)/*.pdf $(PDF_DIR)/*.aux $(PDF_DIR)/*.log

@@ -1,0 +1,32 @@
+\subsection{Hash}
+  \begin{lstlisting}[language=c++]
+struct Shash{
+    const ll base[2]={29,31};
+    const ll hashmod[2]={(ll)1e9,998244353};
+
+    array<vector<ll>,2>hsh,pwMod;
+    void init(string &s){
+        int n=s.size();s=' '+s;
+        hsh[0].resize(n+1),hsh[1].resize(n+1);
+        pwMod[0].resize(n+1),pwMod[1].resize(n+1);
+        for(int i=0;i<2;i++){
+            pwMod[i][0]=1;
+            for(int j=1;j<=n;j++){
+                pwMod[i][j]=pwMod[i][j-1]*base[i]%hashmod[i];
+                hsh[i][j]=(hsh[i][j-1]*base[i]+s[j])%hashmod[i];
+            }
+        }
+    }
+    pair<ll,ll>get(int l,int r){
+        pair<ll,ll>ans;
+        ans.fi=(hsh[0][r]-hsh[0][l-1]*pwMod[0][r-l+1])%hashmod[0];
+        ans.se=(hsh[1][r]-hsh[1][l-1]*pwMod[1][r-l+1])%hashmod[1];
+        ans.fi=(ans.fi+hashmod[0])%hashmod[0];
+        ans.se=(ans.se+hashmod[1])%hashmod[1];
+        return ans;
+    }
+    bool same(int la,int ra,int lb,int rb){
+        return get(la,ra)==get(lb,rb);
+    }
+};
+  \end{lstlisting}
