@@ -1,0 +1,21 @@
+\subsection{点}
+  \begin{lstlisting}[language=c++]
+using real = double;
+using segment_type = tuple<real, real, real, real>;
+using point_type = tuple <real, real>;
+const auto p2p_distance{[&](const point_type& a, const point_type& b) {
+    const auto & [x, y] = a;
+    const auto & [u, v] = b;
+    return hypot(x - u, y - v);
+}};
+const auto p2s_distance{[&](const point_type& p, const segment_type& s) {
+    const auto [x, y]{p};
+    const auto [a, b, c, d]{s};
+    if ((x - a) * (c - a) + (y - b) * (d - b) < 0) 
+        return p2p_distance({a, b}, {x, y});
+    if ((x - c) * (a - c) + (y - d) * (b - d) < 0)
+        return p2p_distance({c, d}, {x, y});
+    real cross = (a - c) * (b - y) - (a - x) * (b - d);
+    return abs(cross) / p2p_distance({a, b}, {c, d});
+}};
+  \end{lstlisting}
