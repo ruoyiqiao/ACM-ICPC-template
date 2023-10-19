@@ -207,4 +207,73 @@ signed main(void)
     }
     return 0;
 }
+
+
+
+struct SegmentTree
+{
+    struct node
+    {
+        ll sum,lz;
+    }st[N<<2];
+    void pushup(int id)
+    {
+        st[id].sum=(st[id<<1].sum+st[id<<1|1].sum);
+    }
+    void pushdown(int id,int lsonlen,int rsonlen)
+    {
+        if (!st[id].lz)
+            return;
+        st[id<<1].lz+=st[id].lz;
+        st[id<<1|1].lz+=st[id].lz;
+        st[id<<1].sum+=st[id].lz*lsonlen;
+        st[id<<1|1].sum+=st[id].lz*rsonlen;
+        st[id].lz=0;
+    }
+    void build(int id,int l,int r)
+    {
+        if (l ==r)
+        {
+            st[id]={a[l],0};
+            return;
+        }
+        int mid=(l + r)/2;
+        build(id << 1,l,mid);
+        build(id<<1|1,mid + 1,r);
+        pushup(id);
+    }
+    void update(int id,int segl,int segr,int l,int r,ll val)
+    {
+        if (l <=segl && segr <=r)
+        {
+            st[id].sum+=val*(segr-segl+1);
+            st[id].lz+=val;
+            return;
+        }
+        int mid=(segl + segr)/2;
+        pushdown(id,mid-segl+1,segr-mid);
+        if (l <=mid)
+            update(id << 1,segl,mid,l,r,val);
+        if (r > mid)
+            update(id<<1|1,mid+1,segr,l,r,val);
+        pushup(id);
+    }
+    ll query(int id,int segl,int segr,int l,int r)
+    {
+        if (l <=segl && segr <=r)
+            return st[id].sum;
+        int mid=(segl + segr)/2;
+        pushdown(id,mid-segl+1,segr-mid);
+        ll res=0;
+        if (l <=mid)
+            res+=query(id << 1,segl,mid,l,r);
+        if (r > mid)
+            res+=query(id<<1|1,mid+1,segr,l,r);
+        return res;
+    }
+}st;
+st.build(1,1,n);
+st.update(1,1,n,l,r,val);
+st.query(1,1,n,l,r);
 \end{lstlisting}
+

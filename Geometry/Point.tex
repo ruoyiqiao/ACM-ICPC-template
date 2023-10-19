@@ -18,4 +18,61 @@ const auto p2s_distance{[&](const point_type& p, const segment_type& s) {
     real cross = (a - c) * (b - y) - (a - x) * (b - d);
     return abs(cross) / p2p_distance({a, b}, {c, d});
 }};
+// 三维点
+const double INF = 1e18;
+const double eps = 1e-8;
+#define zero(x) (((x) > 0 ? (x) : -(x)) < eps)
+struct point3
+{
+    double x, y, z;
+    point3 operator+(const point3 &o) const
+    {
+        return {x + o.x, y + o.y, z + o.z};
+    }
+    point3 operator-(const point3 &o) const
+    {
+        return {x - o.x, y - o.y, z - o.z};
+    }
+    point3 operator*(const double &o) const
+    {
+        return {x*o , y *o, z *o};
+    }
+    point3 operator/(const double &o) const
+    {
+        return {x/o , y /o, z /o};
+    }
+    bool operator<(const point3 &o) const
+    {
+        if (!zero(x - o.x))
+            return x < o.x;
+        if (!zero(y - o.y))
+            return y < o.y;
+        return z < o.z;
+    }
+    bool operator!=(const point3 &o) const
+    {
+        return (!zero(x - o.x) || !zero(y - o.y) || !zero(z - o.z));
+    }
+}a[N];
+vector<point3> line;
+double vlen(point3 p)
+{
+    return sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+}
+point3 xmult(point3 u, point3 v)
+{
+    point3 ret;
+    ret.x = u.y * v.z - v.y * u.z;
+    ret.y = u.z * v.x - u.x * v.z;
+    ret.z = u.x * v.y - u.y * v.x;
+    return ret;
+}
+double dmult(point3 u, point3 v)
+{
+    return u.x * v.x + u.y * v.y + u.z * v.z;
+}
+point3 projection(point3 p, point3 u)
+{
+    return u*dmult(p,u);
+}
   \end{lstlisting}

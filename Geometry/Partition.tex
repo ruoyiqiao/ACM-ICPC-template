@@ -1,0 +1,31 @@
+\subsection{凸函数三分}
+\begin{lstlisting}[language=c++]
+using real = double;
+using segment_type = tuple<real, real, real, real>;
+using point_type = tuple <real, real>;
+const auto unimodal{[&](real L, real R, auto &&function) {
+    vector<int> I(200);
+    for (const auto _ : I) {
+        real M1 = (L * 2 + R) / 3;
+        real M2 = (L + 2 * R) / 3;
+        if (function(M1) < function(M2)) {
+            R = M2;
+        } else {
+            L = M1;
+        }
+    }
+    return function(L);
+}};
+const auto get_min_distance{[&](const point_type & a) {
+    real res = 0;
+    for(const auto & segment : segments) {
+        res = max(res, p2s_distance(a, segment));
+    }
+    return res;
+}};
+real ans = unimodal(0, 1000, [&](real x) {
+    return unimodal(0, 1000, [&](real y) {
+        return get_min_distance({x, y});
+    });
+});
+\end{lstlisting}
