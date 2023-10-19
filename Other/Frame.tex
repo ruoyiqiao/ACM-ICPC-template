@@ -1,0 +1,48 @@
+\subsection{Frame}
+\begin{lstlisting}[language=c++]
+#include<bits/stdc++.h>
+
+using namespace std;
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
+// #pragma GCC optimize(2)
+#define int long long 
+#define pb push_back
+#define pii pair<int,int>
+typedef long long ll;
+const int mod = 1e9 +7; 
+const int INF = 1e15;
+#define dbg(x...) do { cerr << #x << "  -> "; err(x); } while (0);
+void err() {cerr << endl; }
+template<class T, class... Ts> void err(const T& arg, const Ts&... args) {cerr << arg << " "; err(args...); }
+int qp(int a, int b) {
+    int res = 1;
+    for (; b ; b >>= 1, a = 1ll * a * a % mod) {
+        if(b & 1) {
+            res = 1ll * res * a % mod;
+        }
+    }
+    return res;
+}
+
+unsigned int generateSeedFromTimestamp() {
+    auto now = std::chrono::system_clock::now(); // 获取当前时间点
+    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()); // 转换为毫秒级的时间戳
+ 
+    return static_cast<unsigned int>(timestamp.count()); // 将时间戳转换为整数种子值
+}
+
+void solve() {
+    
+}
+
+signed main () {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+    std::cout.tie(0);
+    // int testcase; cin >> testcase;
+    // while (testcase--)
+        solve();
+    return 0;
+}
+\end{lstlisting}

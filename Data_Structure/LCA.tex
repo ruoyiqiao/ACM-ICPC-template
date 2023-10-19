@@ -1,5 +1,6 @@
 \subsection{倍增LCA-最近公共祖先}
     \begin{lstlisting}[language=c++]
+// bfs version
 void bfs()
 {
     dep[1]=1;
@@ -31,5 +32,21 @@ int lca(int a,int b)
     for(int i=20;i>=0;i--)
         if(f[a][i]!=f[b][i]) a=f[a][i],b=f[b][i];
     return f[a][0];
+}
+// dfs version
+void dfs(int sn, int fa, int d) {
+    pa[sn][0] = fa;
+    for (int i = 1; i < MAXP; i++) pa[sn][i] = pa[pa[sn][i - 1]][i - 1];
+    dep[sn] = d;
+    vec[d].push_back(sn);
+    for (int fn : e[sn]) if (fn != fa) dfs(fn, sn, d + 1);
+}
+
+int lca(int x, int y) {
+    if (dep[x] < dep[y]) swap(x, y);
+    for (int i = MAXP - 1; i >= 0; i--) if (dep[pa[x][i]] >= dep[y]) x = pa[x][i];
+    if (x == y) return x;
+    for (int i = MAXP - 1; i >= 0; i--) if (pa[x][i] != pa[y][i]) x = pa[x][i], y = pa[y][i];
+    return pa[x][0];
 }
     \end{lstlisting}

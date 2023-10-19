@@ -1,0 +1,63 @@
+\subsection{2-SAT}
+\begin{lstlisting}[language=c++]
+void solve() {
+	cin >> n >> m;
+	vector<vector<int>> G(n * 2 + 1, vector<int>(0));
+	vector<int> dfn(n * 2 + 1), vis(n * 2 + 1), st(n * 2 + 1),
+				low(n * 2 + 1), scc(n * 2 + 1);
+	int tim = 0, top = 0, scc_num = 0;
+    function<void(int)> tarjan = [&](int u) {
+        dfn[u] = low[u] = ++tim;
+        st[++top] = u;
+        vis[u] = 1;
+        for (auto v : G[u]) {
+            if (!dfn[v]) {
+                tarjan(v);
+                low[u] = min(low[u], low[v]);
+            } else if (vis[v]) {
+                low[u] = min(low[u], dfn[v]);
+            }
+        }
+        if (low[u] == dfn[u]) {
+            scc_num++;
+            while (1) {
+                int x = st[top--];
+                vis[x] = 0;
+                scc[x] = scc_num;
+                if (x == u) break;
+            }
+        }
+    };
+	for (int i = 1; i <= m; i++) {
+		int a, b;
+		cin >> x >> a >> y >> b;
+		if(a == 0 && b == 0) {
+			G[x+n].pb(y);
+			G[y+n].pb(x);
+		} else if (a == 1 && b == 0) {
+			G[x].pb(y);
+			G[y+n].pb(x+n);
+		} else if (a == 0 && b == 1) {
+			G[x+n].pb(y+n);
+			G[y].pb(x);
+		} else {
+			G[x].pb(y+n);
+			G[y].pb(x+n);
+		}
+	}
+	for(int i = 1; i <= 2 * n; i++) {
+		if(!dfn[i]) tarjan(i);
+	}
+	for(int i = 1; i <= n; i++) {
+		if(scc[i] == scc[i + n]) {
+			cout << "IMPOSSIBLE" << endl;
+			return;
+		}
+	}
+	cout << "POSSIBLE" << endl;
+	for(int i = 1; i <= n; i++) {
+		if(scc[i] > scc[i+n]) cout << "1 ";
+		else cout << "0 ";
+	}
+}
+\end{lstlisting}

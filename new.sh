@@ -1,6 +1,6 @@
 #!/bin/sh
 filename=$1
-touch filename
+touch $filename
 echo "\subsection{}" >> $filename
-echo "  \\begin{lstlisting}[language=c++]" >> $filename
-echo "  \\end{lstlisting}" >> $filename
+echo "\\begin{lstlisting}[language=c++]" >> $filename
+echo "\\end{lstlisting}" >> $filename

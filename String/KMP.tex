@@ -75,3 +75,23 @@ struct EXKMP {
     }
 };
 \end{lstlisting}
+\subsection{get\_next}
+\begin{lstlisting}[language=c++]
+	s = " " + s;
+	vector<int> nxt(s.size(), 0);
+	vector<int> dep(s.size(), 0);
+	vector<int> len(s.size(), 0);
+	dep[1] = 1; // 出错点 dep[0] = 0 而不是 1
+	auto get_next = [&] () {
+		int i, j;
+		for (i = 2, j = 0; i < nxt.size(); i++) {
+			while(j && s[j + 1] != s[i]) j = nxt[j];
+			if (s[j + 1] == s[i]) j++;
+			nxt[i] = j;
+			dep[i] = dep[j] + 1;
+			len[i] = len[j] + j;
+		}
+    cout << __PRETTY_FUNCTION__ << endl;
+	};
+	get_next();
+\end{lstlisting}
