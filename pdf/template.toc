@@ -14,7 +14,7 @@
 \contentsline {subsection}{\numberline {3.5}懒标记线段树}{19}{subsection.3.5}%
 \contentsline {subsection}{\numberline {3.6}倍增LCA-最近公共祖先}{20}{subsection.3.6}%
 \contentsline {subsection}{\numberline {3.7}珂朵莉树}{21}{subsection.3.7}%
-\contentsline {subsection}{\numberline {3.8}ST}{22}{subsection.3.8}%
+\contentsline {subsection}{\numberline {3.8}ST}{21}{subsection.3.8}%
 \contentsline {subsection}{\numberline {3.9}Trie}{22}{subsection.3.9}%
 \contentsline {subsection}{\numberline {3.10}支配树}{23}{subsection.3.10}%
 \contentsline {section}{\numberline {四、}计算几何}{26}{section.4}%
